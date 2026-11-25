@@ -9,25 +9,18 @@ Le script charge des capteurs DEJA PREPARES, evalue septembre et octobre,
 puis produit des CSV pour Streamlit. Pas de nettoyage a realiser.
 """
 
-SEUIL_ALERTE = 0.50
+SEUIL_ALERTE = 0.5
 
 # 1. VOTRE ALGORITHME DE RISQUE, entre 0 et 1.
 def calculer_risque(temperature, vibration, pression, courant, rebut):
-    """Risque de panne dans les 3 jours (score, pas probabilite garantie)."""
+    """Score heuristique basé sur 3 capteurs, borné entre 0 et 1."""
     risque = 0.0
-
-    # Seuils indicatifs : a calibrer sur les donnees reelles.
-    if temperature > 80:
-        risque += 0.25
-    if vibration > 4:
-        risque += 0.25
-    if pression > 6:
-        risque += 0.15
-    if courant > 15:
-        risque += 0.15
-    if rebut > 0.05:
-        risque += 0.20
-
+    if temperature >= 78.0:
+        risque += 0.35
+    if vibration >= 5.0:
+        risque += 0.35
+    if rebut >= 4.5:
+        risque += 0.30
     return float(max(0.0, min(1.0, risque)))
 
 
